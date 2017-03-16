@@ -216,7 +216,7 @@
 		  
           //patch code start
 		  for(var i=0; i<data.length; i++){
-			  if (data[i].SiteName!=null){
+		      if (data[i].SiteName != null && typeof data[i].Url !== "undefined" && !data[i].Url.startsWith("https://")) {
 				  data[i].Url = "https://"+data[i].SiteName+data[i].Url;
 			  }
 		  }
