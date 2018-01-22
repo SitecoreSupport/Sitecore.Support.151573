@@ -146,6 +146,12 @@
       provider.set(pageNumberProperty, 1);
       this.requestPage(provider);
     },
+
+    getMoreListData: function (provider, increasePagesSizeStep) {
+      var newPageSize = provider.get(pageSizeProperty) + increasePagesSizeStep;
+      provider.set(pageSizeProperty, newPageSize);
+      this.requestPage(provider);
+    },
     
     getData: function (provider, onSuccessHandler)
     {
