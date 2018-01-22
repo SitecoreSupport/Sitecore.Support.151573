@@ -68,7 +68,7 @@ namespace Sitecore.Support.Cintel.Reporting.Contact.Page.Processors
                         Assert.IsNotNull(targetRow["SiteName"],"targetRow['SiteName'] != null" );
                         var site = SiteContext.GetSite(targetRow["SiteName"].ToString());
                         Assert.IsNotNull(targetRow["SiteName"], "site != null");
-                        targetRow["SiteName"] = site.HostName;
+                        targetRow["SiteName"] = !String.IsNullOrEmpty(site.TargetHostName) ? site.TargetHostName : site.HostName;
 #endregion patch
 
                         bool flag2 = ((!base.TryFillData<DateTime>(targetRow, Schema.PageStartDateTime, sourceRow, "Pages_DateTime") || !base.TryFillData<Guid>(targetRow, Schema.ItemId, sourceRow, "Pages_Item__id")) || !base.TryFillPagePathAndQuery<string>(targetRow, Schema.Url, sourceRow)) || !base.TryFillData<int>(targetRow, Schema.PageDuration, sourceRow, "Pages_Duration");
