@@ -53,7 +53,7 @@ namespace Sitecore.Support.Cintel.Reporting.Contact.Page.Processors
                     }
                     DataRow sourceRow = queryResult.AsEnumerable().First<DataRow>(predicate);
                     DataRow targetRow = resultTableForView.NewRow();
-                    if ((!base.TryFillData<Guid>(targetRow, Schema.ContactId, sourceRow, "ContactId") || !base.TryFillData<Guid>(targetRow, Schema.VisitId, sourceRow, "_id")) || !base.TryFillData<string>(targetRow, Schema.Url, sourceRow, "Pages_Url_Path") || !base.TryFillData<string>(targetRow, new ViewField<string>("SiteName"), sourceRow, "SiteName"))
+                    if ((!base.TryFillData<Guid>(targetRow, Schema.ContactId, sourceRow, "ContactId") || !base.TryFillData<Guid>(targetRow, Schema.VisitId, sourceRow, "_id")) || !base.TryFillData<string>(targetRow, Schema.Url, sourceRow, "Pages_Url_Path"))
                     {
                         ReportProcessorBase.LogNotificationForView(args.ReportParameters.ViewName, new NotificationMessage
                         {
@@ -62,13 +62,20 @@ namespace Sitecore.Support.Cintel.Reporting.Contact.Page.Processors
                             Text = Translate.Text("One or more data entries are missing due to invalid data")
                         });
                     }
-                    else
+                    else 
                     {
 #region patch
-                        Assert.IsNotNull(targetRow["SiteName"],"targetRow['SiteName'] != null" );
-                        var site = SiteContext.GetSite(targetRow["SiteName"].ToString());
-                        Assert.IsNotNull(targetRow["SiteName"], "site != null");
-                        targetRow["SiteName"] = !String.IsNullOrEmpty(site.TargetHostName) ? site.TargetHostName : site.HostName;
+                        if (base.TryFillData<string>(targetRow, new ViewField<string>("SiteName"), sourceRow, "SiteName"))
+                        {
+                            Assert.IsNotNull(targetRow["SiteName"], "targetRow['SiteName'] != null");
+                            var site = SiteContext.GetSite(targetRow["SiteName"].ToString());
+                            Assert.IsNotNull(targetRow["SiteName"], "site != null");
+                            targetRow["SiteName"] = !String.IsNullOrEmpty(site.TargetHostName) ? site.TargetHostName : site.HostName;
+                        }
+                        else
+                        {
+                            targetRow["SiteName"] = "";
+                        }                       
 #endregion patch
 
                         bool flag2 = ((!base.TryFillData<DateTime>(targetRow, Schema.PageStartDateTime, sourceRow, "Pages_DateTime") || !base.TryFillData<Guid>(targetRow, Schema.ItemId, sourceRow, "Pages_Item__id")) || !base.TryFillPagePathAndQuery<string>(targetRow, Schema.Url, sourceRow)) || !base.TryFillData<int>(targetRow, Schema.PageDuration, sourceRow, "Pages_Duration");

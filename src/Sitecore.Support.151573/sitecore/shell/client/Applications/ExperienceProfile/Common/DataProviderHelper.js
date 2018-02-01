@@ -221,11 +221,14 @@
           var data = oldData.concat(newData);
 		  
           //patch code start
-		  for(var i=0; i<data.length; i++){
-		      if (data[i].SiteName != null && typeof data[i].Url !== "undefined" && !data[i].Url.startsWith("https://")) {
-				  data[i].Url = "https://"+data[i].SiteName+data[i].Url;
-			  }
-		  }
+		      for(var i=0; i<data.length; i++){
+              if (data[i].SiteName != null && data[i].SiteName != "" && typeof data[i].Url !== "undefined" && !data[i].Url.startsWith("https://")) {
+                  data[i].Url = "https://" + data[i].SiteName + data[i].Url;
+              }
+              else if (data[i].SiteName == "" && data[i].Url == "/") {
+                  data[i].Url = " / ";
+              }
+		      }
 		  //patch code end
 
           provider.set(cidataProperty, data);
