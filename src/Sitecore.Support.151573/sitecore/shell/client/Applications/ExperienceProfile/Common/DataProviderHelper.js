@@ -226,7 +226,7 @@
                   data[i].Url = "https://" + data[i].SiteName + data[i].Url;
               }
               else if (data[i].SiteName == "" && data[i].Url == "/") {
-                  data[i].Url = " / ";
+                  data[i].Url = " / "; 
               }
 		      }
 		  //patch code end
